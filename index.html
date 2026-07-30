@@ -1,0 +1,718 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>YASA ESTÉTICA — Centro de Estética Láser en San Gil</title>
+  <meta name="description" content="Depilación láser, rejuvenecimiento facial y tratamiento de manchas y cicatrices en San Gil, Santander. Tecnología avanzada, atención personalizada." />
+  <meta property="og:type" content="website" />
+  <meta property="og:site_name" content="Yasa Estética" />
+  <meta property="og:title" content="YASAR ESTÉTICA — Centro de Estética Láser en San Gil" />
+  <meta property="og:description" content="Depilación láser, rejuvenecimiento facial y tratamiento de manchas y cicatrices. Agenda tu valoración." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,500;0,9..144,600;1,9..144,400;1,9..144,500&family=Sora:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --ink:     #241C15;
+      --bark:    #3D2B1F;
+      --gold:    #B08D57;
+      --gold-lt: #D9C4A0;
+      --blush:   #EFDCC9;
+      --rose:    #8B4B5C;
+      --cream:   #FBF6EF;
+      --white:   #FFFDFB;
+      --glow:    #F3D9A4;
+      --muted:   #948577;
+      --line:    rgba(176,141,87,0.18);
+      --radius:  6px;
+      --ease:    cubic-bezier(0.25, 0.8, 0.25, 1);
+    }
+
+    html { scroll-behavior: smooth; }
+    ::selection { background: var(--gold); color: var(--white); }
+
+    body {
+      font-family: 'Sora', sans-serif;
+      background: var(--cream);
+      color: var(--ink);
+      overflow-x: hidden;
+      -webkit-font-smoothing: antialiased;
+      font-weight: 300;
+    }
+
+    h1, h2, h3, .display {
+      font-family: 'Fraunces', serif;
+      font-weight: 500;
+      letter-spacing: -0.01em;
+    }
+
+    /* ── Preloader ── */
+    #preloader {
+      position: fixed; inset: 0; z-index: 9999;
+      background: var(--ink);
+      display: flex; align-items: center; justify-content: center;
+      flex-direction: column; gap: 1.3rem;
+      transition: opacity 0.7s var(--ease), visibility 0.7s;
+    }
+    #preloader.done { opacity: 0; visibility: hidden; }
+    .preloader-mark {
+      position: relative; width: 64px; height: 64px;
+      display: flex; align-items: center; justify-content: center;
+    }
+    .preloader-mark::before {
+      content: ''; position: absolute; inset: 0; border-radius: 50%;
+      background: radial-gradient(circle, var(--glow) 0%, transparent 70%);
+      animation: glow-pulse 1.8s ease-in-out infinite;
+    }
+    .preloader-mark span {
+      position: relative; font-family: 'Fraunces', serif; font-style: italic;
+      font-size: 1.6rem; color: var(--glow); font-weight: 400;
+    }
+    @keyframes glow-pulse { 0%,100% { opacity: 0.4; transform: scale(0.85); } 50% { opacity: 1; transform: scale(1.15); } }
+    .preloader-text {
+      font-size: 0.68rem; letter-spacing: 0.32em; text-transform: uppercase;
+      color: rgba(255,255,255,0.5);
+    }
+
+    /* ── Nav ── */
+    nav {
+      position: fixed; top: 0; left: 0; right: 0; z-index: 200;
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 1.3rem clamp(1.5rem, 5vw, 4rem);
+      background: rgba(251,246,239,0.9);
+      backdrop-filter: blur(14px); -webkit-backdrop-filter: blur(14px);
+      border-bottom: 1px solid var(--line);
+      transition: box-shadow 0.35s var(--ease), padding 0.35s var(--ease);
+    }
+    nav.scrolled { box-shadow: 0 6px 30px rgba(36,28,21,0.07); padding-top: 0.9rem; padding-bottom: 0.9rem; }
+
+    .nav-logo {
+      font-family: 'Fraunces', serif; font-style: italic;
+      font-size: 1.5rem; font-weight: 500; letter-spacing: 0.01em;
+      color: var(--ink); text-decoration: none; z-index: 210;
+    }
+    .nav-logo span { color: var(--gold); }
+
+    .nav-links { display: flex; gap: 2.4rem; list-style: none; }
+    .nav-links a {
+      font-size: 0.76rem; letter-spacing: 0.1em; text-transform: uppercase;
+      color: var(--bark); text-decoration: none; position: relative;
+      padding-bottom: 4px; transition: color 0.25s;
+    }
+    .nav-links a::after {
+      content: ''; position: absolute; bottom: 0; left: 0; width: 0; height: 1px;
+      background: var(--gold); transition: width 0.3s var(--ease);
+    }
+    .nav-links a:hover { color: var(--rose); }
+    .nav-links a:hover::after { width: 100%; }
+
+    .nav-cta {
+      font-size: 0.72rem; letter-spacing: 0.1em; text-transform: uppercase;
+      padding: 0.7rem 1.6rem; border-radius: 999px;
+      background: var(--ink); color: var(--white); text-decoration: none;
+      transition: background 0.3s var(--ease), transform 0.3s var(--ease);
+      z-index: 210;
+    }
+    .nav-cta:hover { background: var(--rose); transform: translateY(-1px); }
+
+    .hamburger {
+      display: none; background: none; border: none; cursor: pointer; z-index: 210;
+      width: 28px; height: 20px; flex-direction: column; justify-content: space-between;
+    }
+    .hamburger span { display: block; width: 100%; height: 1.5px; background: var(--ink); transition: transform 0.35s var(--ease), opacity 0.25s; }
+    .hamburger.open span:nth-child(1) { transform: translateY(9px) rotate(45deg); }
+    .hamburger.open span:nth-child(2) { opacity: 0; }
+    .hamburger.open span:nth-child(3) { transform: translateY(-9px) rotate(-45deg); }
+
+    .mobile-menu {
+      position: fixed; inset: 0; z-index: 190; background: var(--blush);
+      display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 2rem;
+      opacity: 0; visibility: hidden; transition: opacity 0.4s var(--ease), visibility 0.4s;
+    }
+    .mobile-menu.open { opacity: 1; visibility: visible; }
+    .mobile-menu a {
+      font-family: 'Fraunces', serif; font-size: 1.9rem; font-style: italic;
+      color: var(--ink); text-decoration: none;
+      opacity: 0; transform: translateY(16px);
+      transition: opacity 0.4s var(--ease), transform 0.4s var(--ease), color 0.25s;
+    }
+    .mobile-menu.open a { opacity: 1; transform: translateY(0); }
+    .mobile-menu.open a:nth-child(1) { transition-delay: 0.06s; }
+    .mobile-menu.open a:nth-child(2) { transition-delay: 0.11s; }
+    .mobile-menu.open a:nth-child(3) { transition-delay: 0.16s; }
+    .mobile-menu.open a:nth-child(4) { transition-delay: 0.21s; }
+    .mobile-menu.open a:nth-child(5) { transition-delay: 0.26s; }
+    .mobile-menu a:hover { color: var(--rose); }
+
+    /* ── Hero ── */
+    #hero {
+      min-height: 100vh; display: grid; grid-template-columns: 1.1fr 0.9fr;
+      align-items: center; gap: 2rem; padding: 8rem clamp(1.5rem, 5vw, 4rem) 4rem;
+      position: relative; overflow: hidden;
+    }
+    #hero::before {
+      content: ''; position: absolute; top: -20%; right: -10%; width: 60%; height: 70%;
+      background: radial-gradient(circle, var(--glow) 0%, transparent 68%);
+      opacity: 0.55; filter: blur(4px); pointer-events: none;
+      animation: drift 9s ease-in-out infinite;
+    }
+    @keyframes drift { 0%,100% { transform: translate(0,0) scale(1); } 50% { transform: translate(-3%, 4%) scale(1.08); } }
+
+    .hero-eyebrow {
+      font-size: 0.76rem; letter-spacing: 0.24em; text-transform: uppercase;
+      color: var(--rose); margin-bottom: 1.3rem; display: flex; align-items: center; gap: 0.6rem;
+    }
+    .hero-eyebrow::before { content: ''; width: 28px; height: 1px; background: var(--rose); }
+
+    .hero-title {
+      font-size: clamp(2.6rem, 5.6vw, 4.6rem); line-height: 1.05; font-weight: 500;
+      color: var(--ink); max-width: 12ch;
+    }
+    .hero-title em { font-style: italic; color: var(--gold); font-weight: 400; }
+
+    .hero-sub {
+      margin-top: 1.6rem; font-size: 1.05rem; line-height: 1.7; color: var(--bark);
+      max-width: 42ch; font-weight: 300;
+    }
+
+    .hero-actions { margin-top: 2.4rem; display: flex; gap: 1rem; flex-wrap: wrap; }
+    .btn {
+      display: inline-flex; align-items: center; gap: 0.5rem;
+      padding: 0.95rem 1.9rem; border-radius: 999px; text-decoration: none;
+      font-size: 0.82rem; letter-spacing: 0.05em; text-transform: uppercase;
+      transition: transform 0.3s var(--ease), background 0.3s var(--ease), box-shadow 0.3s var(--ease);
+    }
+    .btn-primary { background: var(--rose); color: var(--white); box-shadow: 0 10px 24px rgba(139,75,92,0.28); }
+    .btn-primary:hover { transform: translateY(-2px); box-shadow: 0 14px 30px rgba(139,75,92,0.36); }
+    .btn-ghost { background: transparent; color: var(--ink); border: 1px solid var(--line); }
+    .btn-ghost:hover { border-color: var(--gold); color: var(--gold); transform: translateY(-2px); }
+
+    .hero-badges { margin-top: 3rem; display: flex; gap: 1.8rem; flex-wrap: wrap; }
+    .hero-badge { display: flex; align-items: center; gap: 0.6rem; font-size: 0.82rem; color: var(--bark); }
+    .hero-badge svg { width: 17px; height: 17px; color: var(--gold); flex-shrink: 0; }
+
+    .hero-visual {
+      position: relative; aspect-ratio: 3/4; border-radius: 24px;
+      background: linear-gradient(160deg, var(--blush) 0%, var(--gold-lt) 55%, var(--gold) 100%);
+      overflow: hidden;
+    }
+    .hero-visual::after {
+      content: ''; position: absolute; inset: 0;
+      background: radial-gradient(circle at 30% 20%, rgba(255,255,255,0.55), transparent 55%);
+    }
+    .hero-visual .beam {
+      position: absolute; top: 0; left: -30%; width: 40%; height: 100%;
+      background: linear-gradient(100deg, transparent, rgba(255,255,255,0.5), transparent);
+      animation: sweep 4.5s ease-in-out infinite;
+    }
+    @keyframes sweep { 0% { left: -40%; } 60%,100% { left: 120%; } }
+
+    /* ── Section shell ── */
+    section { padding: 6.5rem clamp(1.5rem, 5vw, 4rem); position: relative; }
+    .section-head { max-width: 60ch; margin-bottom: 3.2rem; }
+    .eyebrow {
+      font-size: 0.74rem; letter-spacing: 0.2em; text-transform: uppercase; color: var(--rose);
+      margin-bottom: 0.9rem; display: block;
+    }
+    .section-title { font-size: clamp(1.9rem, 3.4vw, 2.6rem); color: var(--ink); }
+    .section-sub { margin-top: 1rem; font-size: 1rem; color: var(--muted); line-height: 1.7; max-width: 52ch; }
+
+    .reveal { opacity: 0; transform: translateY(26px); transition: opacity 0.7s var(--ease), transform 0.7s var(--ease); }
+    .reveal.visible { opacity: 1; transform: translateY(0); }
+
+    /* ── Servicios ── */
+    #servicios { background: var(--white); }
+    .services-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1.8rem; }
+    .service-card {
+      background: var(--cream); border: 1px solid var(--line); border-radius: var(--radius);
+      padding: 2.4rem 2rem; display: flex; flex-direction: column; gap: 1.2rem;
+      transition: transform 0.35s var(--ease), box-shadow 0.35s var(--ease), border-color 0.35s;
+    }
+    .service-card:hover { transform: translateY(-6px); box-shadow: 0 20px 40px rgba(36,28,21,0.08); border-color: var(--gold-lt); }
+    .service-icon {
+      width: 52px; height: 52px; border-radius: 50%;
+      background: radial-gradient(circle, var(--glow), var(--gold-lt));
+      display: flex; align-items: center; justify-content: center;
+    }
+    .service-icon svg { width: 24px; height: 24px; color: var(--ink); }
+    .service-card h3 { font-size: 1.3rem; font-weight: 500; }
+    .service-card p { font-size: 0.92rem; line-height: 1.65; color: var(--muted); flex-grow: 1; }
+    .service-link {
+      font-size: 0.78rem; letter-spacing: 0.06em; text-transform: uppercase;
+      color: var(--rose); text-decoration: none; display: inline-flex; align-items: center; gap: 0.4rem;
+    }
+    .service-link:hover { color: var(--gold); }
+
+    /* ── Divisor de luz (signature) ── */
+    .glow-divider {
+      height: 140px; position: relative; overflow: hidden;
+      display: flex; align-items: center; justify-content: center;
+    }
+    .glow-divider::before {
+      content: ''; position: absolute; width: 160%; height: 3px;
+      background: linear-gradient(90deg, transparent, var(--gold) 20%, var(--glow) 50%, var(--gold) 80%, transparent);
+      opacity: 0; transform: scaleX(0.3);
+      transition: opacity 1.1s var(--ease), transform 1.1s var(--ease);
+    }
+    .glow-divider.visible::before { opacity: 1; transform: scaleX(1); }
+    .glow-divider span {
+      position: relative; font-family: 'Fraunces', serif; font-style: italic; font-size: 1rem;
+      color: var(--gold); background: var(--cream); padding: 0 1.4rem;
+      opacity: 0; transition: opacity 1.4s var(--ease) 0.3s;
+    }
+    .glow-divider.visible span { opacity: 1; }
+
+    /* ── Resultados / antes-después ── */
+    #resultados { background: var(--cream); }
+    .compare {
+      position: relative; max-width: 780px; margin: 0 auto; aspect-ratio: 16/10;
+      border-radius: 18px; overflow: hidden; cursor: ew-resize;
+      box-shadow: 0 30px 60px rgba(36,28,21,0.14);
+    }
+    .compare-after, .compare-before {
+      position: absolute; inset: 0; display: flex; align-items: flex-end; padding: 1.4rem;
+      font-size: 0.72rem; letter-spacing: 0.12em; text-transform: uppercase; color: var(--white);
+    }
+    .compare-after { background: linear-gradient(135deg, #C9A46B, #8B6B44); }
+    .compare-before { background: linear-gradient(135deg, #E7CBAE, #C7A57C); overflow: hidden; }
+    .compare-before-inner { position: absolute; inset: 0; width: 100vw; }
+    .compare-clip { position: absolute; inset: 0; width: 50%; overflow: hidden; z-index: 2; }
+    .compare-handle {
+      position: absolute; top: 0; bottom: 0; left: 50%; width: 3px; background: var(--white);
+      transform: translateX(-50%); z-index: 3; box-shadow: 0 0 0 1px rgba(0,0,0,0.05);
+    }
+    .compare-handle::after {
+      content: '⇔'; position: absolute; top: 50%; left: 50%; transform: translate(-50%,-50%);
+      width: 44px; height: 44px; border-radius: 50%; background: var(--white);
+      display: flex; align-items: center; justify-content: center; font-size: 1rem; color: var(--ink);
+      box-shadow: 0 8px 20px rgba(36,28,21,0.2);
+    }
+    .compare-note {
+      text-align: center; font-size: 0.82rem; color: var(--muted); margin-top: 1.2rem;
+    }
+
+    /* ── Nosotras ── */
+    #nosotras { background: var(--white); display: grid; grid-template-columns: 0.9fr 1.1fr; gap: 3rem; align-items: center; }
+    .nosotras-visual {
+      aspect-ratio: 4/5; border-radius: 20px; position: relative; overflow: hidden;
+      background: linear-gradient(200deg, var(--rose) 0%, var(--bark) 100%);
+    }
+    .nosotras-visual::after {
+      content: ''; position: absolute; inset: 0;
+      background: radial-gradient(circle at 70% 80%, rgba(243,217,164,0.4), transparent 55%);
+    }
+    .nosotras-text .section-title { margin-top: 0.6rem; }
+    .nosotras-list { margin-top: 1.8rem; display: flex; flex-direction: column; gap: 1rem; }
+    .nosotras-item { display: flex; gap: 0.9rem; align-items: flex-start; }
+    .nosotras-item svg { width: 19px; height: 19px; color: var(--gold); flex-shrink: 0; margin-top: 2px; }
+    .nosotras-item p { font-size: 0.92rem; color: var(--bark); line-height: 1.6; }
+
+    /* ── Testimonios ── */
+    #testimonios { background: var(--blush); }
+    .testi-track { display: flex; gap: 1.6rem; overflow: hidden; }
+    .testi-card {
+      flex: 1 0 calc(33.333% - 1.1rem); background: var(--white); border-radius: var(--radius);
+      padding: 2rem 1.8rem; display: flex; flex-direction: column; gap: 1rem;
+      border: 1px solid var(--line);
+    }
+    .testi-stars { color: var(--gold); font-size: 0.9rem; letter-spacing: 0.15em; }
+    .testi-card p { font-size: 0.95rem; line-height: 1.65; color: var(--bark); font-style: italic; font-family: 'Fraunces', serif; }
+    .testi-name { font-size: 0.8rem; letter-spacing: 0.05em; color: var(--muted); text-transform: uppercase; }
+
+    /* ── FAQ ── */
+    #preguntas { background: var(--white); max-width: 900px; margin: 0 auto; }
+    .faq-item { border-bottom: 1px solid var(--line); }
+    .faq-q {
+      width: 100%; background: none; border: none; text-align: left; cursor: pointer;
+      padding: 1.5rem 0; display: flex; align-items: center; justify-content: space-between; gap: 1rem;
+      font-family: 'Fraunces', serif; font-size: 1.1rem; color: var(--ink);
+    }
+    .faq-q .plus { font-size: 1.4rem; color: var(--gold); transition: transform 0.3s var(--ease); flex-shrink: 0; }
+    .faq-item.open .faq-q .plus { transform: rotate(45deg); }
+    .faq-a {
+      max-height: 0; overflow: hidden; transition: max-height 0.4s var(--ease), padding 0.4s var(--ease);
+      font-size: 0.92rem; color: var(--muted); line-height: 1.7;
+    }
+    .faq-item.open .faq-a { max-height: 260px; padding-bottom: 1.5rem; }
+
+    /* ── Reserva ── */
+    #reserva {
+      background: var(--ink); color: var(--white); border-radius: 28px;
+      margin: 0 clamp(1.5rem, 5vw, 4rem) 0; padding: 5rem clamp(1.5rem, 4vw, 3.5rem);
+      display: grid; grid-template-columns: 1.1fr 0.9fr; gap: 3rem; align-items: center;
+      position: relative; overflow: hidden;
+    }
+    #reserva::before {
+      content: ''; position: absolute; bottom: -30%; left: -10%; width: 55%; height: 80%;
+      background: radial-gradient(circle, var(--glow), transparent 70%); opacity: 0.35;
+    }
+    #reserva .eyebrow { color: var(--gold-lt); }
+    #reserva h2 { color: var(--white); font-size: clamp(1.9rem, 3.4vw, 2.6rem); }
+    #reserva p.lead { margin-top: 1rem; color: var(--blush); font-size: 1rem; line-height: 1.7; max-width: 46ch; }
+    .reserva-info { display: flex; flex-direction: column; gap: 1.4rem; position: relative; }
+    .reserva-row { display: flex; gap: 0.9rem; align-items: flex-start; }
+    .reserva-row svg { width: 19px; height: 19px; color: var(--gold-lt); flex-shrink: 0; margin-top: 2px; }
+    .reserva-row p { font-size: 0.9rem; color: var(--blush); line-height: 1.55; }
+    .reserva-row strong { display: block; color: var(--white); font-size: 0.95rem; margin-bottom: 0.15rem; }
+
+    /* ── WhatsApp float ── */
+    .wa-float {
+      position: fixed; bottom: 1.8rem; right: 1.8rem; z-index: 150;
+      width: 58px; height: 58px; border-radius: 50%; background: #25D366;
+      display: flex; align-items: center; justify-content: center;
+      box-shadow: 0 12px 28px rgba(37,211,102,0.4); text-decoration: none;
+      animation: float-bob 3s ease-in-out infinite;
+    }
+    .wa-float svg { width: 28px; height: 28px; fill: var(--white); }
+    @keyframes float-bob { 0%,100% { transform: translateY(0); } 50% { transform: translateY(-6px); } }
+
+    /* ── Footer ── */
+    footer { padding: 3.5rem clamp(1.5rem, 5vw, 4rem) 2rem; }
+    .footer-top {
+      display: flex; justify-content: space-between; align-items: flex-start;
+      flex-wrap: wrap; gap: 2.5rem; padding-bottom: 2.5rem; border-bottom: 1px solid var(--line);
+    }
+    .footer-logo { font-family: 'Fraunces', serif; font-style: italic; font-size: 1.5rem; color: var(--ink); }
+    .footer-logo span { color: var(--gold); }
+    .footer-tag { margin-top: 0.6rem; font-size: 0.85rem; color: var(--muted); max-width: 32ch; }
+    .footer-cols { display: flex; gap: 3.5rem; flex-wrap: wrap; }
+    .footer-col h4 { font-size: 0.76rem; letter-spacing: 0.14em; text-transform: uppercase; color: var(--bark); margin-bottom: 1rem; }
+    .footer-col a { display: block; font-size: 0.86rem; color: var(--muted); text-decoration: none; margin-bottom: 0.6rem; transition: color 0.25s; }
+    .footer-col a:hover { color: var(--rose); }
+    .footer-bottom {
+      margin-top: 1.8rem; display: flex; justify-content: space-between; flex-wrap: wrap; gap: 0.8rem;
+      font-size: 0.76rem; color: var(--muted);
+    }
+
+    /* ── Responsive ── */
+    @media (max-width: 980px) {
+      .nav-links, .nav-cta { display: none; }
+      .hamburger { display: flex; }
+      #hero { grid-template-columns: 1fr; }
+      .hero-visual { max-width: 420px; margin: 0 auto; order: -1; }
+      .hero-title { max-width: none; }
+      .services-grid { grid-template-columns: 1fr; }
+      .testi-track { flex-direction: column; }
+      .testi-card { flex: 1 1 auto; }
+      #nosotras { grid-template-columns: 1fr; }
+      .nosotras-visual { max-width: 380px; margin: 0 auto; }
+      #reserva { grid-template-columns: 1fr; border-radius: 20px; }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after { animation-duration: 0.001ms !important; transition-duration: 0.001ms !important; }
+    }
+  </style>
+</head>
+<body>
+
+  <div id="preloader">
+    <div class="preloader-mark"><span>Y</span></div>
+    <div class="preloader-text">Yasa Estética</div>
+  </div>
+
+  <nav id="mainNav">
+    <a href="#hero" class="nav-logo">YASA <span>ESTÉTICA</span></a>
+    <ul class="nav-links">
+      <li><a href="#servicios">Servicios</a></li>
+      <li><a href="#resultados">Resultados</a></li>
+      <li><a href="#nosotras">Nosotras</a></li>
+      <li><a href="#testimonios">Testimonios</a></li>
+      <li><a href="#preguntas">Preguntas</a></li>
+    </ul>
+    <a href="#reserva" class="nav-cta">Reservar cita</a>
+    <button class="hamburger" id="hamburger" aria-label="Abrir menú">
+      <span></span><span></span><span></span>
+    </button>
+  </nav>
+
+  <div class="mobile-menu" id="mobileMenu">
+    <a href="#servicios">Servicios</a>
+    <a href="#resultados">Resultados</a>
+    <a href="#nosotras">Nosotras</a>
+    <a href="#testimonios">Testimonios</a>
+    <a href="#reserva">Reservar cita</a>
+  </div>
+
+  <section id="hero">
+    <div>
+      <div class="hero-eyebrow">Centro de estética láser · San Gil</div>
+      <h1 class="hero-title">Donde la <em>luz</em> transforma tu piel</h1>
+      <p class="hero-sub">Depilación láser, rejuvenecimiento facial y tratamiento de manchas y cicatrices, con tecnología avanzada y un plan pensado para tu piel, no para un molde genérico.</p>
+      <div class="hero-actions">
+        <a href="#reserva" class="btn btn-primary">Reservar valoración</a>
+        <a href="#servicios" class="btn btn-ghost">Ver servicios</a>
+      </div>
+      <div class="hero-badges">
+        <div class="hero-badge"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M20 6L9 17l-5-5"/></svg> Tecnología láser de última generación</div>
+        <div class="hero-badge"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M20 6L9 17l-5-5"/></svg> Planes personalizados por tipo de piel</div>
+      </div>
+    </div>
+    <div class="hero-visual"><div class="beam"></div></div>
+  </section>
+
+  <section id="servicios">
+    <div class="section-head reveal">
+      <span class="eyebrow">Tratamientos</span>
+      <h2 class="section-title">Servicios pensados para cada etapa de tu piel</h2>
+      <p class="section-sub">Tres líneas de tratamiento, una misma promesa: resultados progresivos, seguros y acompañados en cada sesión.</p>
+    </div>
+    <div class="services-grid">
+      <div class="service-card reveal">
+        <div class="service-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M12 2v6M12 16v6M4.9 4.9l4.2 4.2M14.9 14.9l4.2 4.2M2 12h6M16 12h6M4.9 19.1l4.2-4.2M14.9 9.1l4.2-4.2"/></svg></div>
+        <h3>Depilación láser</h3>
+        <p>Reducción duradera del vello con tecnología de última generación, apta para distintos tipos de piel. Sesiones progresivas, cómodas y con seguimiento personalizado en cada zona.</p>
+        <a class="service-link" href="#" data-wa-service="Depilación láser">Consultar por WhatsApp →</a>
+      </div>
+      <div class="service-card reveal">
+        <div class="service-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><circle cx="12" cy="12" r="4"/><path d="M12 2v3M12 19v3M4.2 4.2l2.1 2.1M17.7 17.7l2.1 2.1M2 12h3M19 12h3M4.2 19.8l2.1-2.1M17.7 6.3l2.1-2.1"/></svg></div>
+        <h3>Rejuvenecimiento facial</h3>
+        <p>Tratamientos con luz que estimulan la producción de colágeno, mejoran la textura y devuelven luminosidad al rostro. Ideal para líneas de expresión, flacidez leve y piel opaca.</p>
+        <a class="service-link" href="#" data-wa-service="Rejuvenecimiento facial">Consultar por WhatsApp →</a>
+      </div>
+      <div class="service-card reveal">
+        <div class="service-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M12 3l2.5 5.5L20 9l-4 4 1 6-5-3-5 3 1-6-4-4 5.5-.5z"/></svg></div>
+        <h3>Manchas, cicatrices y acné</h3>
+        <p>Protocolos dirigidos para unificar el tono de la piel, atenuar cicatrices y controlar brotes activos de acné, con planes de mantenimiento a mediano plazo.</p>
+        <a class="service-link" href="#" data-wa-service="Manchas, cicatrices y acné">Consultar por WhatsApp →</a>
+      </div>
+    </div>
+  </section>
+
+  <div class="glow-divider reveal-glow"><span>Resultados que se notan sesión a sesión</span></div>
+
+  <section id="resultados">
+    <div class="section-head reveal" style="margin-left:auto;margin-right:auto;text-align:center;">
+      <span class="eyebrow">Antes y después</span>
+      <h2 class="section-title">Desliza para ver la diferencia</h2>
+      <p class="section-sub" style="margin-left:auto;margin-right:auto;">Ejemplo ilustrativo del progreso típico de un tratamiento. Reemplaza estas imágenes por fotografías reales de tus pacientes, siempre con su autorización.</p>
+    </div>
+    <div class="compare reveal" id="compareSlider">
+      <div class="compare-after"><span>Después</span></div>
+      <div class="compare-clip" id="compareClip">
+        <div class="compare-before" style="width:100vw;"><span>Antes</span></div>
+      </div>
+      <div class="compare-handle" id="compareHandle"></div>
+    </div>
+    <p class="compare-note">Imagen de ejemplo — sustituir por fotografías reales del centro.</p>
+  </section>
+
+  <section id="nosotras">
+    <div class="nosotras-visual reveal"></div>
+    <div class="nosotras-text reveal">
+      <span class="eyebrow">Nosotras</span>
+      <h2 class="section-title">Un centro pensado para acompañarte, no solo para tratarte</h2>
+      <p class="section-sub">Yasa Estética nació en San Gil con una idea simple: la estética láser funciona mejor cuando hay tiempo, escucha y tecnología adecuada detrás de cada sesión.</p>
+      <div class="nosotras-list">
+        <div class="nosotras-item">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M20 6L9 17l-5-5"/></svg>
+          <p>Valoración inicial para diseñar un plan según tu tipo de piel y objetivo.</p>
+        </div>
+        <div class="nosotras-item">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M20 6L9 17l-5-5"/></svg>
+          <p>Equipos de tecnología láser de última generación, con protocolos de bioseguridad.</p>
+        </div>
+        <div class="nosotras-item">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M20 6L9 17l-5-5"/></svg>
+          <p>Seguimiento sesión a sesión para ajustar el tratamiento a como responde tu piel.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="testimonios">
+    <div class="section-head reveal">
+      <span class="eyebrow">Testimonios</span>
+      <h2 class="section-title">Lo que dicen quienes ya empezaron su tratamiento</h2>
+      <p class="section-sub">Ejemplos de reseña — reemplázalos por testimonios reales de tus pacientes.</p>
+    </div>
+    <div class="testi-track">
+      <div class="testi-card reveal">
+        <div class="testi-stars">★★★★★</div>
+        <p>"Empecé con depilación láser y desde la tercera sesión ya notaba la diferencia. Muy buena atención."</p>
+        <div class="testi-name">Laura M. — San Gil</div>
+      </div>
+      <div class="testi-card reveal">
+        <div class="testi-stars">★★★★★</div>
+        <p>"El tratamiento facial me ayudó muchísimo con las manchas. Me explicaron todo el proceso desde el inicio."</p>
+        <div class="testi-name">Camila R. — San Gil</div>
+      </div>
+      <div class="testi-card reveal">
+        <div class="testi-stars">★★★★★</div>
+        <p>"Se nota que conocen bien la piel de cada persona, el plan que me dieron fue distinto al de mi hermana."</p>
+        <div class="testi-name">Valentina P. — San Gil</div>
+      </div>
+    </div>
+  </section>
+
+  <section id="preguntas">
+    <div class="section-head reveal">
+      <span class="eyebrow">Preguntas frecuentes</span>
+      <h2 class="section-title">Antes de tu primera cita</h2>
+    </div>
+    <div class="faq-item reveal">
+      <button class="faq-q">¿La depilación láser duele?<span class="plus">+</span></button>
+      <div class="faq-a"><p>La mayoría de personas sienten una sensación de calor leve durante el paso del láser. No suele considerarse un procedimiento doloroso y es bien tolerado en la mayoría de zonas del cuerpo.</p></div>
+    </div>
+    <div class="faq-item reveal">
+      <button class="faq-q">¿Cuántas sesiones necesito?<span class="plus">+</span></button>
+      <div class="faq-a"><p>Depende de la zona, el tipo de vello y el objetivo del tratamiento. En la valoración inicial te damos un estimado de sesiones y tiempos entre cada una.</p></div>
+    </div>
+    <div class="faq-item reveal">
+      <button class="faq-q">¿Puedo hacerme el tratamiento si tengo la piel bronceada?<span class="plus">+</span></button>
+      <div class="faq-a"><p>Se recomienda evitar la exposición solar directa antes y después de cada sesión. En la valoración evaluamos tu piel y te damos indicaciones específicas de cuidado.</p></div>
+    </div>
+    <div class="faq-item reveal">
+      <button class="faq-q">¿Qué cuidados debo tener después de una sesión?<span class="plus">+</span></button>
+      <div class="faq-a"><p>Uso de protector solar, evitar exfoliantes agresivos en la zona tratada y seguir las indicaciones específicas que te damos según el tratamiento realizado.</p></div>
+    </div>
+  </section>
+
+  <section id="reserva">
+    <div>
+      <span class="eyebrow">Reserva tu cita</span>
+      <h2>Agenda tu valoración inicial</h2>
+      <p class="lead">Cuéntanos qué te gustaría tratar y te respondemos por WhatsApp para agendar tu primera cita en San Gil.</p>
+      <div class="hero-actions" style="margin-top:2rem;">
+        <a href="#" id="waMainBtn" class="btn btn-primary">Escribir por WhatsApp</a>
+        <a href="#" id="igBtn" class="btn btn-ghost" style="border-color:rgba(255,255,255,0.25);color:var(--white);">Ver Instagram</a>
+      </div>
+    </div>
+    <div class="reserva-info">
+      <div class="reserva-row">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M12 21s-7-6.2-7-11a7 7 0 1114 0c0 4.8-7 11-7 11z"/><circle cx="12" cy="10" r="2.5"/></svg>
+        <p><strong>Ubicación</strong>Dirección por confirmar — San Gil, Santander</p>
+      </div>
+      <div class="reserva-row">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 3"/></svg>
+        <p><strong>Horario</strong>Lunes a sábado — horario por confirmar</p>
+      </div>
+      <div class="reserva-row">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M3 5a2 2 0 012-2h3l2 5-2.5 1.5a11 11 0 006 6L15 13l5 2v3a2 2 0 01-2 2A16 16 0 013 5z"/></svg>
+        <p><strong>WhatsApp</strong>+57 000 000 0000</p>
+      </div>
+    </div>
+  </section>
+
+  <a href="#" id="waFloat" class="wa-float" aria-label="Escribir por WhatsApp" target="_blank" rel="noopener">
+    <svg viewBox="0 0 32 32"><path d="M16.02 3C9.4 3 4 8.4 4 15.02c0 2.24.6 4.35 1.66 6.16L4 29l8.02-1.62A11.9 11.9 0 0016.02 27C22.65 27 28 21.65 28 15.02 28 8.4 22.65 3 16.02 3zm0 21.7c-1.87 0-3.62-.5-5.14-1.38l-.37-.22-4.36.88.9-4.25-.24-.38a9.65 9.65 0 01-1.5-5.14c0-5.36 4.36-9.72 9.71-9.72 5.36 0 9.71 4.36 9.71 9.72 0 5.36-4.35 9.71-9.71 9.71zm5.34-7.28c-.29-.15-1.7-.84-1.97-.93-.26-.1-.46-.15-.65.14-.19.29-.75.93-.92 1.12-.17.19-.34.22-.63.07-.29-.14-1.22-.45-2.32-1.44-.86-.76-1.44-1.7-1.6-1.99-.17-.29-.02-.44.13-.59.13-.13.29-.34.43-.5.14-.17.19-.29.29-.48.1-.19.05-.36-.02-.5-.07-.15-.65-1.57-.9-2.15-.24-.57-.48-.5-.65-.5h-.56c-.19 0-.5.07-.76.36-.26.29-1 .98-1 2.38 0 1.4 1.02 2.76 1.16 2.95.14.19 2 3.06 4.86 4.29.68.29 1.21.47 1.62.6.68.22 1.3.19 1.79.11.55-.08 1.7-.69 1.94-1.36.24-.67.24-1.24.17-1.36-.07-.12-.26-.19-.55-.34z"/></svg>
+  </a>
+
+  <footer>
+    <div class="footer-top">
+      <div>
+        <div class="footer-logo">YASA <span>ESTÉTICA</span></div>
+        <p class="footer-tag">Centro de estética láser en San Gil, Santander. Depilación láser, rejuvenecimiento facial y tratamiento de manchas y cicatrices.</p>
+      </div>
+      <div class="footer-cols">
+        <div class="footer-col">
+          <h4>Explorar</h4>
+          <a href="#servicios">Servicios</a>
+          <a href="#resultados">Resultados</a>
+          <a href="#nosotras">Nosotras</a>
+          <a href="#testimonios">Testimonios</a>
+        </div>
+        <div class="footer-col">
+          <h4>Contacto</h4>
+          <a href="#" id="waFooterLink">WhatsApp</a>
+          <a href="#" id="igFooterLink">Instagram</a>
+          <a href="#reserva">San Gil, Santander</a>
+        </div>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <span>© <span id="year"></span> Yasa Estética. Todos los derechos reservados.</span>
+      <span>Hecho con cuidado en San Gil</span>
+    </div>
+  </footer>
+
+  <script>
+    /* ── CONFIGURACIÓN: reemplaza estos valores con los datos reales del centro ── */
+    const WHATSAPP_NUMBER = "573000000000"; // reemplazar con el número real, formato 57XXXXXXXXXX
+    const INSTAGRAM_URL = "https://instagram.com/yasarestetica"; // reemplazar si el usuario es distinto
+
+    function waLink(message) {
+      return `https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(message)}`;
+    }
+
+    document.getElementById('waMainBtn').href = waLink('Hola, quisiera agendar una valoración en Yasa Estética.');
+    document.getElementById('waFloat').href = waLink('Hola, quisiera más información sobre los tratamientos de Yasa Estética.');
+    document.getElementById('waFooterLink').href = waLink('Hola, quisiera más información sobre los tratamientos de Yasa Estética.');
+    document.getElementById('igBtn').href = INSTAGRAM_URL;
+    document.getElementById('igFooterLink').href = INSTAGRAM_URL;
+    document.querySelectorAll('[data-wa-service]').forEach(a => {
+      a.href = waLink(`Hola, quisiera más información sobre ${a.dataset.waService}.`);
+    });
+
+    /* ── Preloader ── */
+    window.addEventListener('load', () => {
+      setTimeout(() => document.getElementById('preloader').classList.add('done'), 400);
+    });
+
+    /* ── Nav scroll + menú móvil ── */
+    const nav = document.getElementById('mainNav');
+    window.addEventListener('scroll', () => nav.classList.toggle('scrolled', window.scrollY > 30), { passive: true });
+
+    const hamburger = document.getElementById('hamburger');
+    const mobileMenu = document.getElementById('mobileMenu');
+    hamburger.addEventListener('click', () => {
+      hamburger.classList.toggle('open');
+      mobileMenu.classList.toggle('open');
+    });
+    mobileMenu.querySelectorAll('a').forEach(a => a.addEventListener('click', () => {
+      hamburger.classList.remove('open');
+      mobileMenu.classList.remove('open');
+    }));
+
+    /* ── Reveal en scroll ── */
+    const revealObserver = new IntersectionObserver((entries) => {
+      entries.forEach((entry, i) => {
+        if (entry.isIntersecting) {
+          setTimeout(() => entry.target.classList.add('visible'), (i % 4) * 90);
+          revealObserver.unobserve(entry.target);
+        }
+      });
+    }, { threshold: 0.12, rootMargin: '0px 0px -40px 0px' });
+    document.querySelectorAll('.reveal').forEach(el => revealObserver.observe(el));
+    document.querySelectorAll('.reveal-glow').forEach(el => revealObserver.observe(el));
+
+    const glowObserver = new IntersectionObserver((entries) => {
+      entries.forEach(entry => { if (entry.isIntersecting) { entry.target.classList.add('visible'); glowObserver.unobserve(entry.target); } });
+    }, { threshold: 0.4 });
+    document.querySelectorAll('.glow-divider').forEach(el => glowObserver.observe(el));
+
+    /* ── FAQ acordeón ── */
+    document.querySelectorAll('.faq-item').forEach(item => {
+      item.querySelector('.faq-q').addEventListener('click', () => {
+        const isOpen = item.classList.contains('open');
+        document.querySelectorAll('.faq-item.open').forEach(i => i.classList.remove('open'));
+        if (!isOpen) item.classList.add('open');
+      });
+    });
+
+    /* ── Slider antes/después ── */
+    const slider = document.getElementById('compareSlider');
+    const clip = document.getElementById('compareClip');
+    const handle = document.getElementById('compareHandle');
+    let dragging = false;
+
+    function setPosition(clientX) {
+      const rect = slider.getBoundingClientRect();
+      let pct = ((clientX - rect.left) / rect.width) * 100;
+      pct = Math.max(4, Math.min(96, pct));
+      clip.style.width = pct + '%';
+      handle.style.left = pct + '%';
+    }
+    slider.addEventListener('mousedown', e => { dragging = true; setPosition(e.clientX); });
+    window.addEventListener('mousemove', e => { if (dragging) setPosition(e.clientX); });
+    window.addEventListener('mouseup', () => dragging = false);
+    slider.addEventListener('touchstart', e => setPosition(e.touches[0].clientX), { passive: true });
+    slider.addEventListener('touchmove', e => setPosition(e.touches[0].clientX), { passive: true });
+
+    document.getElementById('year').textContent = new Date().getFullYear();
+  </script>
+</body>
+</html>
