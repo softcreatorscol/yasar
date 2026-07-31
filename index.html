@@ -225,13 +225,30 @@
 
     /* ── Servicios ── */
     #servicios { background: var(--white); }
+    .service-filters { display: flex; gap: 0.7rem; flex-wrap: wrap; margin-bottom: 2.6rem; }
+    .filter-btn {
+      font-family: 'Sora', sans-serif; font-size: 0.76rem; letter-spacing: 0.05em; text-transform: uppercase;
+      padding: 0.6rem 1.4rem; border-radius: 999px; border: 1px solid var(--line);
+      background: var(--white); color: var(--bark); cursor: pointer;
+      transition: background 0.3s var(--ease), color 0.3s var(--ease), border-color 0.3s var(--ease);
+    }
+    .filter-btn:hover { border-color: var(--gold); color: var(--gold); }
+    .filter-btn.active { background: var(--ink); border-color: var(--ink); color: var(--white); }
+
     .services-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1.8rem; }
     .service-card {
       background: var(--cream); border: 1px solid var(--line); border-radius: var(--radius);
-      padding: 2.4rem 2rem; display: flex; flex-direction: column; gap: 1.2rem;
-      transition: transform 0.35s var(--ease), box-shadow 0.35s var(--ease), border-color 0.35s;
+      padding: 2.4rem 2rem; display: flex; flex-direction: column; gap: 0.9rem;
+      transition: transform 0.35s var(--ease), box-shadow 0.35s var(--ease), border-color 0.35s,
+        opacity 0.35s var(--ease), display 0.35s allow-discrete;
     }
     .service-card:hover { transform: translateY(-6px); box-shadow: 0 20px 40px rgba(36,28,21,0.08); border-color: var(--gold-lt); }
+    .service-card.hidden { display: none; }
+    .service-tag {
+      font-size: 0.66rem; letter-spacing: 0.1em; text-transform: uppercase; color: var(--rose);
+      background: rgba(139,75,92,0.08); padding: 0.3rem 0.7rem; border-radius: 999px;
+      align-self: flex-start;
+    }
     .service-icon {
       width: 52px; height: 52px; border-radius: 50%;
       background: radial-gradient(circle, var(--glow), var(--gold-lt));
@@ -387,6 +404,10 @@
       font-size: 0.76rem; color: var(--muted);
     }
 
+    @media (max-width: 1180px) and (min-width: 981px) {
+      .services-grid { grid-template-columns: repeat(2, 1fr); }
+    }
+
     /* ── Responsive ── */
     @media (max-width: 980px) {
       .nav-links, .nav-cta { display: none; }
@@ -395,6 +416,8 @@
       .hero-visual { max-width: 420px; margin: 0 auto; order: -1; }
       .hero-title { max-width: none; }
       .services-grid { grid-template-columns: 1fr; }
+      .service-filters { gap: 0.5rem; }
+      .filter-btn { padding: 0.5rem 1.1rem; font-size: 0.72rem; }
       .testi-track { flex-direction: column; }
       .testi-card { flex: 1 1 auto; }
       #nosotras { grid-template-columns: 1fr; }
@@ -457,27 +480,106 @@
   <section id="servicios">
     <div class="section-head reveal">
       <span class="eyebrow">Tratamientos</span>
-      <h2 class="section-title">Servicios pensados para cada etapa de tu piel</h2>
-      <p class="section-sub">Tres líneas de tratamiento, una misma promesa: resultados progresivos, seguros y acompañados en cada sesión.</p>
+      <h2 class="section-title">Un plan para cada objetivo</h2>
+      <p class="section-sub">Depilación, facial, corporal, armonización y postoperatorio. Filtra por categoría o revisa el menú completo de tratamientos.</p>
     </div>
+
+    <div class="service-filters reveal">
+      <button class="filter-btn active" data-filter="todos">Todos</button>
+      <button class="filter-btn" data-filter="facial">Facial</button>
+      <button class="filter-btn" data-filter="corporal">Corporal</button>
+      <button class="filter-btn" data-filter="piel">Piel y cicatrices</button>
+      <button class="filter-btn" data-filter="armonizacion">Armonización</button>
+      <button class="filter-btn" data-filter="postoperatorio">Postoperatorio</button>
+    </div>
+
     <div class="services-grid">
-      <div class="service-card reveal">
+      <div class="service-card reveal" data-category="corporal facial">
         <div class="service-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M12 2v6M12 16v6M4.9 4.9l4.2 4.2M14.9 14.9l4.2 4.2M2 12h6M16 12h6M4.9 19.1l4.2-4.2M14.9 9.1l4.2-4.2"/></svg></div>
+        <span class="service-tag">Facial y corporal</span>
         <h3>Depilación láser</h3>
         <p>Reducción duradera del vello con tecnología de última generación, apta para distintos tipos de piel. Sesiones progresivas, cómodas y con seguimiento personalizado en cada zona.</p>
         <a class="service-link" href="#" data-wa-service="Depilación láser">Consultar por WhatsApp →</a>
       </div>
-      <div class="service-card reveal">
+
+      <div class="service-card reveal" data-category="facial">
         <div class="service-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><circle cx="12" cy="12" r="4"/><path d="M12 2v3M12 19v3M4.2 4.2l2.1 2.1M17.7 17.7l2.1 2.1M2 12h3M19 12h3M4.2 19.8l2.1-2.1M17.7 6.3l2.1-2.1"/></svg></div>
+        <span class="service-tag">Facial</span>
         <h3>Rejuvenecimiento facial</h3>
         <p>Tratamientos con luz que estimulan la producción de colágeno, mejoran la textura y devuelven luminosidad al rostro. Ideal para líneas de expresión, flacidez leve y piel opaca.</p>
         <a class="service-link" href="#" data-wa-service="Rejuvenecimiento facial">Consultar por WhatsApp →</a>
       </div>
-      <div class="service-card reveal">
+
+      <div class="service-card reveal" data-category="piel">
         <div class="service-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M12 3l2.5 5.5L20 9l-4 4 1 6-5-3-5 3 1-6-4-4 5.5-.5z"/></svg></div>
+        <span class="service-tag">Piel y cicatrices</span>
         <h3>Manchas, cicatrices y acné</h3>
         <p>Protocolos dirigidos para unificar el tono de la piel, atenuar cicatrices y controlar brotes activos de acné, con planes de mantenimiento a mediano plazo.</p>
         <a class="service-link" href="#" data-wa-service="Manchas, cicatrices y acné">Consultar por WhatsApp →</a>
+      </div>
+
+      <div class="service-card reveal" data-category="corporal">
+        <div class="service-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M12 2v20M2 12h20M4.9 4.9l14.2 14.2M19.1 4.9L4.9 19.1"/></svg></div>
+        <span class="service-tag">Corporal</span>
+        <h3>Criolipólisis 360°</h3>
+        <p>Reducción de grasa localizada mediante frío controlado, cubriendo la zona tratada de forma completa. No invasiva y sin tiempo de recuperación.</p>
+        <a class="service-link" href="#" data-wa-service="Criolipólisis 360">Consultar por WhatsApp →</a>
+      </div>
+
+      <div class="service-card reveal" data-category="facial corporal">
+        <div class="service-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M3 17c3-5 6-5 9 0s6 5 9 0"/><path d="M12 3l-3 4h6l-3-4z"/></svg></div>
+        <span class="service-tag">Facial y corporal</span>
+        <h3>Tensa Max</h3>
+        <p>Tratamiento de tensado que ayuda a mejorar la firmeza de la piel en rostro y cuerpo, indicado para flacidez leve a moderada.</p>
+        <a class="service-link" href="#" data-wa-service="Tensa Max">Consultar por WhatsApp →</a>
+      </div>
+
+      <div class="service-card reveal" data-category="facial">
+        <div class="service-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><circle cx="12" cy="12" r="2.5"/><circle cx="12" cy="12" r="7" stroke-dasharray="2 3.5"/></svg></div>
+        <span class="service-tag">Facial</span>
+        <h3>Láser CO2</h3>
+        <p>Láser fraccionado que renueva la piel en profundidad, mejorando textura, cicatrices y signos de envejecimiento con resultados progresivos.</p>
+        <a class="service-link" href="#" data-wa-service="Láser CO2">Consultar por WhatsApp →</a>
+      </div>
+
+      <div class="service-card reveal" data-category="piel corporal">
+        <div class="service-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M4 8c3-3 5 3 8 0s5-3 8 0"/><path d="M4 16c3-3 5 3 8 0s5-3 8 0" opacity="0.45"/></svg></div>
+        <span class="service-tag">Piel y cicatrices</span>
+        <h3>Camuflaje de estrías sin tinta</h3>
+        <p>Técnica que atenúa la apariencia de las estrías estimulando la piel de forma natural, sin uso de pigmentos ni tintas.</p>
+        <a class="service-link" href="#" data-wa-service="Camuflaje de estrías sin tinta">Consultar por WhatsApp →</a>
+      </div>
+
+      <div class="service-card reveal" data-category="piel">
+        <div class="service-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M12 3c3 4 5 7 5 10a5 5 0 01-10 0c0-3 2-6 5-10z"/><path d="M9.5 21h5" opacity="0.5"/></svg></div>
+        <span class="service-tag">Piel y cicatrices</span>
+        <h3>Eliminación de tatuajes</h3>
+        <p>Remoción progresiva de tatuajes mediante tecnología láser, en sesiones espaciadas según el tamaño y el tipo de tinta.</p>
+        <a class="service-link" href="#" data-wa-service="Eliminación de tatuajes">Consultar por WhatsApp →</a>
+      </div>
+
+      <div class="service-card reveal" data-category="postoperatorio">
+        <div class="service-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M12 20s-7-4.5-7-10a4 4 0 017-2.6A4 4 0 0119 10c0 5.5-7 10-7 10z"/><path d="M12 8v4M10 10h4"/></svg></div>
+        <span class="service-tag">Postoperatorio</span>
+        <h3>Postoperatorios</h3>
+        <p>Acompañamiento y cuidados posteriores a procedimientos estéticos, con seguimiento cercano en cada etapa de tu recuperación.</p>
+        <a class="service-link" href="#" data-wa-service="Postoperatorios">Consultar por WhatsApp →</a>
+      </div>
+
+      <div class="service-card reveal" data-category="corporal">
+        <div class="service-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M9 4c3 2 3 6 0 8s-3 6 0 8"/><path d="M15 4c-3 2-3 6 0 8s3 6 0 8" opacity="0.5"/></svg></div>
+        <span class="service-tag">Corporal</span>
+        <h3>Perfilamos tu silueta</h3>
+        <p>Tratamiento corporal enfocado en definir contornos y modelar la silueta, combinando técnicas según tu objetivo.</p>
+        <a class="service-link" href="#" data-wa-service="Perfilamiento de silueta">Consultar por WhatsApp →</a>
+      </div>
+
+      <div class="service-card reveal" data-category="armonizacion">
+        <div class="service-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M4 12c2-3 6-3 8 0 2-3 6-3 8 0-2 3-6 5-8 5s-6-2-8-5z"/></svg></div>
+        <span class="service-tag">Armonización facial</span>
+        <h3>Rinomodelación y labios</h3>
+        <p>Armonización facial con ácido hialurónico para perfilar la nariz y definir los labios de forma no quirúrgica.</p>
+        <a class="service-link" href="#" data-wa-service="Rinomodelación y labios con ácido hialurónico">Consultar por WhatsApp →</a>
       </div>
     </div>
   </section>
@@ -683,6 +785,22 @@
       entries.forEach(entry => { if (entry.isIntersecting) { entry.target.classList.add('visible'); glowObserver.unobserve(entry.target); } });
     }, { threshold: 0.4 });
     document.querySelectorAll('.glow-divider').forEach(el => glowObserver.observe(el));
+
+    /* ── Filtro de servicios ── */
+    const filterBtns = document.querySelectorAll('.filter-btn');
+    const serviceCards = document.querySelectorAll('.service-card');
+    filterBtns.forEach(btn => {
+      btn.addEventListener('click', () => {
+        filterBtns.forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+        const filter = btn.dataset.filter;
+        serviceCards.forEach(card => {
+          const cats = (card.dataset.category || '').split(' ');
+          const match = filter === 'todos' || cats.includes(filter);
+          card.classList.toggle('hidden', !match);
+        });
+      });
+    });
 
     /* ── FAQ acordeón ── */
     document.querySelectorAll('.faq-item').forEach(item => {
