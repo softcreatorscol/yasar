@@ -319,6 +319,37 @@
       text-align: center; font-size: 0.82rem; color: var(--muted); margin-top: 1.2rem;
     }
 
+    /* ── Sistema de slides reutilizable (sin recorte de imagen) ── */
+    .media-slide {
+      position: absolute; inset: 0; opacity: 0; z-index: 0;
+      transition: opacity 0.5s var(--ease);
+    }
+    .media-slide.active { opacity: 1; z-index: 1; }
+    .media-slide .slide-bg {
+      position: absolute; inset: -12%; background-size: cover; background-position: center;
+      filter: blur(28px) brightness(0.55) saturate(1.15); transform: scale(1.1);
+    }
+    .media-slide .slide-fg {
+      position: relative; z-index: 1; width: 100%; height: 100%;
+      object-fit: contain; object-position: center; display: block;
+    }
+    .media-arrow {
+      position: absolute; top: 50%; transform: translateY(-50%); z-index: 6;
+      width: 42px; height: 42px; border-radius: 50%; background: rgba(255,255,255,0.9);
+      border: none; cursor: pointer; display: flex; align-items: center; justify-content: center;
+      color: var(--ink); transition: background 0.25s, transform 0.25s;
+    }
+    .media-arrow:hover { background: var(--white); transform: translateY(-50%) scale(1.06); }
+    .media-arrow.prev { left: 14px; }
+    .media-arrow.next { right: 14px; }
+    .media-arrow svg { width: 18px; height: 18px; }
+    .media-dots { display: flex; gap: 0.5rem; }
+    .media-dots span {
+      width: 7px; height: 7px; border-radius: 50%; background: rgba(255,255,255,0.4); cursor: pointer;
+      transition: background 0.25s, transform 0.25s;
+    }
+    .media-dots span.active { background: var(--glow); transform: scale(1.25); }
+
     /* ── Promo influencer ── */
     #promo {
       padding: 0 clamp(1.5rem, 5vw, 4rem) 6.5rem;
@@ -326,16 +357,12 @@
     .promo-banner {
       position: relative; border-radius: 26px; overflow: hidden;
       min-height: 560px; display: flex; align-items: flex-end;
-      box-shadow: 0 30px 70px rgba(36,28,21,0.22);
+      box-shadow: 0 30px 70px rgba(36,28,21,0.22); background: var(--ink);
     }
-    .promo-banner img {
-      position: absolute; inset: 0; width: 100%; height: 100%;
-      object-fit: cover; object-position: 50% 22%; display: block;
-    }
-    .promo-banner::before {
-      content: ''; position: absolute; inset: 0; z-index: 1;
-      background: linear-gradient(0deg, rgba(36,28,21,0.88) 0%, rgba(36,28,21,0.35) 45%, rgba(36,28,21,0.05) 68%),
-                  linear-gradient(100deg, rgba(36,28,21,0.35) 0%, transparent 55%);
+    .promo-slides { position: absolute; inset: 0; z-index: 0; }
+    .promo-scrim {
+      position: absolute; inset: 0; z-index: 2; pointer-events: none;
+      background: linear-gradient(0deg, rgba(36,28,21,0.88) 0%, rgba(36,28,21,0.4) 42%, rgba(36,28,21,0.05) 66%);
     }
     .promo-glow {
       position: absolute; top: -15%; right: -8%; width: 55%; height: 60%; z-index: 1;
@@ -343,7 +370,7 @@
       opacity: 0.4; filter: blur(6px); pointer-events: none;
     }
     .promo-content {
-      position: relative; z-index: 2; padding: clamp(2rem, 5vw, 3.6rem);
+      position: relative; z-index: 3; padding: clamp(2rem, 5vw, 3.6rem);
       display: flex; flex-direction: column; gap: 1rem; max-width: 620px;
     }
     .promo-badge {
@@ -359,6 +386,10 @@
       color: var(--blush); font-size: 1rem; line-height: 1.7; max-width: 48ch;
     }
     .promo-content .hero-actions { margin-top: 0.6rem; }
+    .promo-banner .media-arrow { z-index: 6; }
+    .promo-banner .promo-dots {
+      position: absolute; right: clamp(1.2rem, 3vw, 2rem); bottom: clamp(1.2rem, 3vw, 2rem); z-index: 6;
+    }
 
     @media (max-width: 640px) {
       .promo-banner { min-height: 440px; }
@@ -498,31 +529,11 @@
       position: relative; background: var(--ink); aspect-ratio: 4/3; overflow: hidden;
       display: flex; align-items: center; justify-content: center;
     }
-    .lightbox-stage img {
-      width: 100%; height: 100%; object-fit: cover; display: block;
-      opacity: 0; position: absolute; inset: 0; transition: opacity 0.35s var(--ease);
-    }
-    .lightbox-stage img.active { opacity: 1; position: relative; }
     .lightbox-empty {
       color: var(--gold-lt); text-align: center; padding: 2rem; font-family: 'Fraunces', serif;
       font-style: italic; font-size: 1.05rem;
     }
-    .lightbox-nav {
-      position: absolute; top: 50%; transform: translateY(-50%); z-index: 5;
-      width: 40px; height: 40px; border-radius: 50%; background: rgba(255,255,255,0.85);
-      border: none; cursor: pointer; display: flex; align-items: center; justify-content: center;
-      transition: background 0.25s, transform 0.25s; color: var(--ink);
-    }
-    .lightbox-nav:hover { background: var(--white); transform: translateY(-50%) scale(1.06); }
-    .lightbox-nav.prev { left: 12px; }
-    .lightbox-nav.next { right: 12px; }
-    .lightbox-nav svg { width: 18px; height: 18px; }
-    .lightbox-dots { display: flex; gap: 0.4rem; justify-content: center; padding: 0.9rem 0 0; }
-    .lightbox-dots span {
-      width: 7px; height: 7px; border-radius: 50%; background: var(--line); cursor: pointer;
-      transition: background 0.25s, transform 0.25s;
-    }
-    .lightbox-dots span.active { background: var(--gold); transform: scale(1.2); }
+    .lightbox-stage .media-dots { justify-content: center; padding: 0; position: absolute; left: 50%; bottom: 12px; transform: translateX(-50%); z-index: 5; }
     .lightbox-body { padding: 1.3rem 1.6rem 1.7rem; }
     .lightbox-body p { font-size: 0.92rem; color: var(--muted); line-height: 1.65; margin-bottom: 1.1rem; }
     .lightbox-body .btn { width: 100%; justify-content: center; }
@@ -729,9 +740,10 @@
   </section>
 
   <section id="promo">
-    <div class="promo-banner reveal">
-      <img src="influencer.jpg" alt="Yasar Estética" loading="lazy" />
+    <div class="promo-banner reveal" id="promoBanner" data-images="influencer.jpg">
+      <div class="promo-slides" id="promoSlides"></div>
       <div class="promo-glow"></div>
+      <div class="promo-scrim"></div>
       <div class="promo-content">
         <span class="promo-badge">✦ Recomendado</span>
         <h2>La piel que <em>brilla</em> se nota</h2>
@@ -740,6 +752,13 @@
           <a href="#reserva" class="btn btn-primary">Quiero mi valoración</a>
         </div>
       </div>
+      <button class="media-arrow prev" id="promoPrev" aria-label="Foto anterior">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M15 18l-6-6 6-6"/></svg>
+      </button>
+      <button class="media-arrow next" id="promoNext" aria-label="Foto siguiente">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 18l6-6-6-6"/></svg>
+      </button>
+      <div class="media-dots promo-dots" id="promoDots"></div>
     </div>
   </section>
 
@@ -883,14 +902,14 @@
       </div>
       <div class="lightbox-stage" id="lightboxStage">
         <!-- las <img> se inyectan por JS -->
-        <button class="lightbox-nav prev" id="lightboxPrev" aria-label="Anterior">
+        <button class="media-arrow prev" id="lightboxPrev" aria-label="Anterior">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M15 18l-6-6 6-6"/></svg>
         </button>
-        <button class="lightbox-nav next" id="lightboxNext" aria-label="Siguiente">
+        <button class="media-arrow next" id="lightboxNext" aria-label="Siguiente">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 18l6-6-6-6"/></svg>
         </button>
       </div>
-      <div class="lightbox-dots" id="lightboxDots"></div>
+      <div class="media-dots" id="lightboxDots"></div>
       <div class="lightbox-body">
         <p id="lightboxDesc"></p>
         <a href="#" id="lightboxWaBtn" class="btn btn-primary" target="_blank" rel="noopener">Consultar por WhatsApp</a>
@@ -997,6 +1016,91 @@
     document.getElementById('year').textContent = new Date().getFullYear();
 
     /* ══════════════════════════════════════════════
+       Helper genérico: arma slides (foto completa, sin
+       recorte, con fondo difuminado) dentro de un contenedor,
+       con flechas y puntos de navegación reutilizables.
+    ══════════════════════════════════════════════ */
+    function buildSlideEl(src, alt) {
+      const slide = document.createElement('div');
+      slide.className = 'media-slide';
+      const bg = document.createElement('div');
+      bg.className = 'slide-bg';
+      bg.style.backgroundImage = `url("${src}")`;
+      const fg = document.createElement('img');
+      fg.className = 'slide-fg';
+      fg.src = src;
+      fg.alt = alt || '';
+      fg.loading = 'lazy';
+      slide.appendChild(bg);
+      slide.appendChild(fg);
+      return slide;
+    }
+
+    function createCarousel({ track, dotsEl, prevBtn, nextBtn, images, alt, emptyMessage, insertBefore }) {
+      let index = 0;
+
+      function render() {
+        track.innerHTML = '';
+        dotsEl.innerHTML = '';
+
+        if (images.length === 0) {
+          const empty = document.createElement('div');
+          empty.className = 'lightbox-empty';
+          empty.textContent = emptyMessage || 'Muy pronto vas a poder ver fotos aquí.';
+          track.appendChild(empty);
+          if (prevBtn) prevBtn.style.display = 'none';
+          if (nextBtn) nextBtn.style.display = 'none';
+          return;
+        }
+
+        images.forEach((src, i) => {
+          const slide = buildSlideEl(src, alt);
+          if (i === index) slide.classList.add('active');
+          track.appendChild(slide);
+        });
+
+        if (images.length > 1) {
+          images.forEach((_, i) => {
+            const dot = document.createElement('span');
+            if (i === index) dot.classList.add('active');
+            dot.addEventListener('click', () => { index = i; render(); });
+            dotsEl.appendChild(dot);
+          });
+          if (prevBtn) prevBtn.style.display = 'flex';
+          if (nextBtn) nextBtn.style.display = 'flex';
+        } else {
+          if (prevBtn) prevBtn.style.display = 'none';
+          if (nextBtn) nextBtn.style.display = 'none';
+        }
+      }
+
+      if (prevBtn) prevBtn.addEventListener('click', () => { index = (index - 1 + images.length) % images.length; render(); });
+      if (nextBtn) nextBtn.addEventListener('click', () => { index = (index + 1) % images.length; render(); });
+
+      render();
+      return {
+        setImages(newImages) { images = newImages; index = 0; render(); },
+        next() { if (images.length > 1) { index = (index + 1) % images.length; render(); } },
+        prev() { if (images.length > 1) { index = (index - 1 + images.length) % images.length; render(); } }
+      };
+    }
+
+    /* ── Carrusel del banner promocional (influencer) ──
+       Para agregar más fotos, edita data-images en #promoBanner,
+       ej: data-images="influencer.jpg,influencer-2.jpg" */
+    const promoBannerEl = document.getElementById('promoBanner');
+    const promoImages = (promoBannerEl.dataset.images || '').split(',').map(s => s.trim()).filter(Boolean);
+    createCarousel({
+      track: document.getElementById('promoSlides'),
+      dotsEl: document.getElementById('promoDots'),
+      prevBtn: document.getElementById('promoPrev'),
+      nextBtn: document.getElementById('promoNext'),
+      images: promoImages,
+      alt: 'Yasar Estética',
+      emptyMessage: ''
+    });
+
+    /* ══════════════════════════════════════════════
        LIGHTBOX — galería de fotos por servicio
        Cada .service-card trae:
          data-service="Nombre del tratamiento"
@@ -1014,64 +1118,31 @@
     const closeBtn       = document.getElementById('lightboxClose');
     const lightboxWaBtn  = document.getElementById('lightboxWaBtn');
 
-    let currentImages = [];
-    let currentIndex = 0;
-
-    function renderStage() {
-      stage.querySelectorAll('img').forEach(img => img.remove());
-      dotsEl.innerHTML = '';
-
-      if (currentImages.length === 0) {
-        let empty = stage.querySelector('.lightbox-empty');
-        if (!empty) {
-          empty = document.createElement('div');
-          empty.className = 'lightbox-empty';
-          empty.textContent = 'Muy pronto vas a poder ver fotos de este tratamiento aquí.';
-          stage.appendChild(empty);
-        }
-        prevBtn.style.display = 'none';
-        nextBtn.style.display = 'none';
-        return;
-      }
-
-      const existingEmpty = stage.querySelector('.lightbox-empty');
-      if (existingEmpty) existingEmpty.remove();
-
-      currentImages.forEach((src, i) => {
-        const img = document.createElement('img');
-        img.src = src;
-        img.alt = titleEl.textContent;
-        img.loading = 'lazy';
-        if (i === currentIndex) img.classList.add('active');
-        stage.insertBefore(img, prevBtn);
-      });
-
-      if (currentImages.length > 1) {
-        currentImages.forEach((_, i) => {
-          const dot = document.createElement('span');
-          if (i === currentIndex) dot.classList.add('active');
-          dot.addEventListener('click', () => { currentIndex = i; renderStage(); });
-          dotsEl.appendChild(dot);
-        });
-        prevBtn.style.display = 'flex';
-        nextBtn.style.display = 'flex';
-      } else {
-        prevBtn.style.display = 'none';
-        nextBtn.style.display = 'none';
-      }
-    }
+    let serviceCarousel = null;
 
     function openLightbox(card) {
       const serviceName = card.dataset.service || 'Tratamiento';
       const imagesRaw = card.dataset.images || '';
-      currentImages = imagesRaw.split(',').map(s => s.trim()).filter(Boolean);
-      currentIndex = 0;
+      const images = imagesRaw.split(',').map(s => s.trim()).filter(Boolean);
 
       titleEl.textContent = serviceName;
       descEl.textContent = card.querySelector('p') ? card.querySelector('p').textContent : '';
       lightboxWaBtn.href = waLink(`Hola, quisiera más información sobre ${serviceName}.`);
 
-      renderStage();
+      if (serviceCarousel) {
+        serviceCarousel.setImages(images);
+      } else {
+        serviceCarousel = createCarousel({
+          track: stage,
+          dotsEl: dotsEl,
+          prevBtn: prevBtn,
+          nextBtn: nextBtn,
+          images: images,
+          alt: serviceName,
+          emptyMessage: 'Muy pronto vas a poder ver fotos de este tratamiento aquí.'
+        });
+      }
+
       overlay.classList.add('open');
       document.body.style.overflow = 'hidden';
     }
@@ -1087,19 +1158,11 @@
 
     closeBtn.addEventListener('click', closeLightbox);
     overlay.addEventListener('click', (e) => { if (e.target === overlay) closeLightbox(); });
-    prevBtn.addEventListener('click', () => {
-      currentIndex = (currentIndex - 1 + currentImages.length) % currentImages.length;
-      renderStage();
-    });
-    nextBtn.addEventListener('click', () => {
-      currentIndex = (currentIndex + 1) % currentImages.length;
-      renderStage();
-    });
     document.addEventListener('keydown', (e) => {
-      if (!overlay.classList.contains('open')) return;
+      if (!overlay.classList.contains('open') || !serviceCarousel) return;
       if (e.key === 'Escape') closeLightbox();
-      if (e.key === 'ArrowLeft' && currentImages.length > 1) { currentIndex = (currentIndex - 1 + currentImages.length) % currentImages.length; renderStage(); }
-      if (e.key === 'ArrowRight' && currentImages.length > 1) { currentIndex = (currentIndex + 1) % currentImages.length; renderStage(); }
+      if (e.key === 'ArrowLeft') serviceCarousel.prev();
+      if (e.key === 'ArrowRight') serviceCarousel.next();
     });
   </script>
 </body>
