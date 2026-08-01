@@ -204,6 +204,10 @@
       content: ''; position: absolute; inset: 0;
       background: radial-gradient(circle at 30% 20%, rgba(255,255,255,0.55), transparent 55%);
     }
+    .hero-visual-img {
+      position: absolute; inset: 0; width: 100%; height: 100%;
+      object-fit: cover; object-position: center 30%; display: block; z-index: 0;
+    }
     .hero-visual .beam {
       position: absolute; top: 0; left: -30%; width: 40%; height: 100%;
       background: linear-gradient(100deg, transparent, rgba(255,255,255,0.5), transparent);
@@ -270,6 +274,36 @@
       position: relative; z-index: 2;
     }
     .service-link:hover { color: var(--gold); }
+
+    /* ── Vista previa de fotos dentro de la tarjeta de servicio ──
+       Se agrega automáticamente por JS cuando la tarjeta tiene data-images.
+       Si hay más de una foto, aparecen las flechitas para pasar entre ellas
+       sin necesidad de abrir la galería completa. */
+    .service-preview {
+      position: relative; width: 100%; aspect-ratio: 4/3; border-radius: 10px;
+      overflow: hidden; background: var(--ink); flex-shrink: 0;
+    }
+    .service-preview-track { position: absolute; inset: 0; }
+    .service-preview-arrow {
+      position: absolute; top: 50%; transform: translateY(-50%); z-index: 6;
+      width: 30px; height: 30px; border-radius: 50%; background: rgba(255,255,255,0.92);
+      border: none; cursor: pointer; display: flex; align-items: center; justify-content: center;
+      color: var(--ink); transition: background 0.25s var(--ease), transform 0.25s var(--ease);
+      box-shadow: 0 4px 12px rgba(36,28,21,0.25);
+    }
+    .service-preview-arrow:hover { background: var(--glow); transform: translateY(-50%) scale(1.08); }
+    .service-preview-arrow.prev { left: 8px; }
+    .service-preview-arrow.next { right: 8px; }
+    .service-preview-arrow svg { width: 14px; height: 14px; }
+    .service-preview-dots {
+      position: absolute; left: 50%; bottom: 8px; transform: translateX(-50%); z-index: 6;
+      display: flex; gap: 4px;
+    }
+    .service-preview-dots span {
+      width: 6px; height: 6px; border-radius: 50%; background: rgba(255,255,255,0.45); cursor: pointer;
+      transition: background 0.25s, transform 0.25s;
+    }
+    .service-preview-dots span.active { background: var(--glow); transform: scale(1.25); }
 
     /* ── Divisor de luz (signature) ── */
     .glow-divider {
@@ -609,7 +643,10 @@
         <div class="hero-badge"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M20 6L9 17l-5-5"/></svg> Planes personalizados por tipo de piel</div>
       </div>
     </div>
-    <div class="hero-visual"><div class="beam"></div></div>
+    <div class="hero-visual">
+      <img src="hero-yasar.png" alt="Yasar Estética" class="hero-visual-img" />
+      <div class="beam"></div>
+    </div>
   </section>
 
   <section id="servicios">
@@ -1063,7 +1100,7 @@
           images.forEach((_, i) => {
             const dot = document.createElement('span');
             if (i === index) dot.classList.add('active');
-            dot.addEventListener('click', () => { index = i; render(); });
+            dot.addEventListener('click', (e) => { e.stopPropagation(); index = i; render(); });
             dotsEl.appendChild(dot);
           });
           if (prevBtn) prevBtn.style.display = 'flex';
@@ -1098,6 +1135,60 @@
       images: promoImages,
       alt: 'Yasar Estética',
       emptyMessage: ''
+    });
+
+    /* ── Vista previa de fotos EN la tarjeta (flechitas para pasar de imagen) ──
+       Para cada .service-card que ya tenga data-images, reemplaza el ícono
+       circular por una mini-galería con foto real. Si hay más de una foto,
+       agrega las flechas prev/next y los puntos para navegar entre ellas.
+       Las tarjetas sin fotos todavía (data-images="") conservan su ícono tal
+       cual estaba, sin ningún cambio. */
+    serviceCards.forEach(card => {
+      const imagesRaw = card.dataset.images || '';
+      const images = imagesRaw.split(',').map(s => s.trim()).filter(Boolean);
+      if (images.length === 0) return; // sin fotos aún: se deja el ícono como estaba
+
+      const icon = card.querySelector('.service-icon');
+      if (!icon) return;
+
+      const preview = document.createElement('div');
+      preview.className = 'service-preview';
+
+      const track = document.createElement('div');
+      track.className = 'service-preview-track';
+      preview.appendChild(track);
+
+      const dots = document.createElement('div');
+      dots.className = 'service-preview-dots';
+
+      let prevArrow = null, nextArrow = null;
+      if (images.length > 1) {
+        prevArrow = document.createElement('button');
+        prevArrow.type = 'button';
+        prevArrow.className = 'service-preview-arrow prev';
+        prevArrow.setAttribute('aria-label', 'Foto anterior');
+        prevArrow.innerHTML = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M15 18l-6-6 6-6"/></svg>';
+
+        nextArrow = document.createElement('button');
+        nextArrow.type = 'button';
+        nextArrow.className = 'service-preview-arrow next';
+        nextArrow.setAttribute('aria-label', 'Foto siguiente');
+        nextArrow.innerHTML = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M9 18l6-6-6-6"/></svg>';
+
+        // Evita que el clic en la flecha abra la galería completa (lightbox)
+        [prevArrow, nextArrow].forEach(btn => btn.addEventListener('click', e => e.stopPropagation()));
+
+        preview.appendChild(prevArrow);
+        preview.appendChild(nextArrow);
+      }
+      preview.appendChild(dots);
+
+      icon.replaceWith(preview);
+
+      createCarousel({
+        track, dotsEl: dots, prevBtn: prevArrow, nextBtn: nextArrow,
+        images, alt: card.dataset.service || '', emptyMessage: ''
+      });
     });
 
     /* ══════════════════════════════════════════════
