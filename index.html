@@ -1,4 +1,4 @@
-}<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="es">
 <head>
   <meta charset="UTF-8" />
@@ -200,20 +200,10 @@
       background: linear-gradient(160deg, var(--blush) 0%, var(--gold-lt) 55%, var(--gold) 100%);
       overflow: hidden;
     }
-    .hero-visual::after {
-      content: ''; position: absolute; inset: 0;
-      background: radial-gradient(circle at 30% 20%, rgba(255,255,255,0.55), transparent 55%);
-    }
     .hero-visual-img {
       position: absolute; inset: 0; width: 100%; height: 100%;
       object-fit: cover; object-position: center 30%; display: block; z-index: 0;
     }
-    .hero-visual .beam {
-      position: absolute; top: 0; left: -30%; width: 40%; height: 100%;
-      background: linear-gradient(100deg, transparent, rgba(255,255,255,0.5), transparent);
-      animation: sweep 4.5s ease-in-out infinite;
-    }
-    @keyframes sweep { 0% { left: -40%; } 60%,100% { left: 120%; } }
 
     /* ── Section shell ── */
     section { padding: 6.5rem clamp(1.5rem, 5vw, 4rem); position: relative; }
@@ -276,9 +266,8 @@
     .service-link:hover { color: var(--gold); }
 
     /* ── Vista previa de fotos dentro de la tarjeta de servicio ──
-       Se agrega automáticamente por JS cuando la tarjeta tiene data-images.
-       Si hay más de una foto, aparecen las flechitas para pasar entre ellas
-       sin necesidad de abrir la galería completa. */
+       (deshabilitada a propósito: las fotos solo se ven al hacer clic,
+       dentro de la galería/lightbox. La tarjeta conserva su ícono.) */
     .service-preview {
       position: relative; width: 100%; aspect-ratio: 4/3; border-radius: 10px;
       overflow: hidden; background: var(--ink); flex-shrink: 0;
@@ -645,7 +634,6 @@
     </div>
     <div class="hero-visual">
       <img src="hero-yasar.png" alt="Yasar Estética" class="hero-visual-img" />
-      <div class="beam"></div>
     </div>
   </section>
 
@@ -1137,65 +1125,13 @@
       emptyMessage: ''
     });
 
-    /* ── Vista previa de fotos EN la tarjeta (flechitas para pasar de imagen) ──
-       Para cada .service-card que ya tenga data-images, reemplaza el ícono
-       circular por una mini-galería con foto real. Si hay más de una foto,
-       agrega las flechas prev/next y los puntos para navegar entre ellas.
-       Las tarjetas sin fotos todavía (data-images="") conservan su ícono tal
-       cual estaba, sin ningún cambio. */
-    serviceCards.forEach(card => {
-      const imagesRaw = card.dataset.images || '';
-      const images = imagesRaw.split(',').map(s => s.trim()).filter(Boolean);
-      if (images.length === 0) return; // sin fotos aún: se deja el ícono como estaba
-
-      const icon = card.querySelector('.service-icon');
-      if (!icon) return;
-
-      const preview = document.createElement('div');
-      preview.className = 'service-preview';
-
-      const track = document.createElement('div');
-      track.className = 'service-preview-track';
-      preview.appendChild(track);
-
-      const dots = document.createElement('div');
-      dots.className = 'service-preview-dots';
-
-      let prevArrow = null, nextArrow = null;
-      if (images.length > 1) {
-        prevArrow = document.createElement('button');
-        prevArrow.type = 'button';
-        prevArrow.className = 'service-preview-arrow prev';
-        prevArrow.setAttribute('aria-label', 'Foto anterior');
-        prevArrow.innerHTML = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M15 18l-6-6 6-6"/></svg>';
-
-        nextArrow = document.createElement('button');
-        nextArrow.type = 'button';
-        nextArrow.className = 'service-preview-arrow next';
-        nextArrow.setAttribute('aria-label', 'Foto siguiente');
-        nextArrow.innerHTML = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M9 18l6-6-6-6"/></svg>';
-
-        // Evita que el clic en la flecha abra la galería completa (lightbox)
-        [prevArrow, nextArrow].forEach(btn => btn.addEventListener('click', e => e.stopPropagation()));
-
-        preview.appendChild(prevArrow);
-        preview.appendChild(nextArrow);
-      }
-      preview.appendChild(dots);
-
-      icon.replaceWith(preview);
-
-      createCarousel({
-        track, dotsEl: dots, prevBtn: prevArrow, nextBtn: nextArrow,
-        images, alt: card.dataset.service || '', emptyMessage: ''
-      });
-    });
-
     /* ══════════════════════════════════════════════
        LIGHTBOX — galería de fotos por servicio
        Cada .service-card trae:
          data-service="Nombre del tratamiento"
          data-images="foto1.jpg,foto2.jpg"  (vacío si aún no hay fotos)
+       Las fotos SOLO se ven aquí, al hacer clic en la tarjeta.
+       Las tarjetas en la grilla siempre muestran su ícono normal.
        Para agregar más fotos a futuro, solo edita el
        atributo data-images de la card correspondiente.
     ══════════════════════════════════════════════ */
