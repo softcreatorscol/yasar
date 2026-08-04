@@ -145,6 +145,7 @@
     .mobile-menu.open a:nth-child(3) { transition-delay: 0.16s; }
     .mobile-menu.open a:nth-child(4) { transition-delay: 0.21s; }
     .mobile-menu.open a:nth-child(5) { transition-delay: 0.26s; }
+    .mobile-menu.open a:nth-child(6) { transition-delay: 0.31s; }
     .mobile-menu a:hover { color: var(--rose); }
 
     /* ── Hero ── */
@@ -455,6 +456,42 @@
     .testi-card p { font-size: 0.95rem; line-height: 1.65; color: var(--bark); font-style: italic; font-family: 'Fraunces', serif; }
     .testi-name { font-size: 0.8rem; letter-spacing: 0.05em; color: var(--muted); text-transform: uppercase; }
 
+    /* ── Productos ── */
+    #productos { background: var(--cream); }
+    .products-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 1.6rem; }
+    .product-card {
+      background: var(--white); border: 1px solid var(--line); border-radius: var(--radius);
+      overflow: hidden; display: flex; flex-direction: column;
+      transition: transform 0.35s var(--ease), box-shadow 0.35s var(--ease), border-color 0.35s;
+    }
+    .product-card:hover { transform: translateY(-6px); box-shadow: 0 20px 40px rgba(36,28,21,0.08); border-color: var(--gold-lt); }
+    .product-media {
+      position: relative; aspect-ratio: 1/1; overflow: hidden;
+      background: linear-gradient(160deg, var(--blush) 0%, var(--gold-lt) 100%);
+    }
+    .product-media img { width: 100%; height: 100%; object-fit: cover; display: block; }
+    .product-badge {
+      position: absolute; top: 0.8rem; left: 0.8rem; z-index: 2;
+      font-size: 0.62rem; letter-spacing: 0.09em; text-transform: uppercase;
+      color: var(--ink); background: var(--glow); padding: 0.32rem 0.7rem; border-radius: 999px;
+    }
+    .product-body { padding: 1.3rem 1.3rem 1.5rem; display: flex; flex-direction: column; gap: 0.6rem; flex-grow: 1; }
+    .product-cat { font-size: 0.66rem; letter-spacing: 0.1em; text-transform: uppercase; color: var(--rose); }
+    .product-body h3 { font-size: 1.05rem; font-weight: 500; line-height: 1.3; }
+    .product-body p { font-size: 0.84rem; color: var(--muted); line-height: 1.55; flex-grow: 1; }
+    .product-footer { display: flex; align-items: center; justify-content: space-between; gap: 0.8rem; margin-top: 0.4rem; }
+    .product-price { font-family: 'Fraunces', serif; font-size: 1.15rem; color: var(--ink); }
+    .product-price span { font-family: 'Sora', sans-serif; font-size: 0.68rem; color: var(--muted); display: block; letter-spacing: 0.04em; }
+    .product-buy {
+      display: inline-flex; align-items: center; gap: 0.4rem;
+      font-size: 0.72rem; letter-spacing: 0.05em; text-transform: uppercase;
+      padding: 0.6rem 1.1rem; border-radius: 999px; background: var(--ink); color: var(--white);
+      text-decoration: none; transition: background 0.3s var(--ease), transform 0.3s var(--ease);
+      white-space: nowrap;
+    }
+    .product-buy:hover { background: var(--rose); transform: translateY(-1px); }
+    .product-buy svg { width: 14px; height: 14px; }
+
     /* ── FAQ ── */
     #preguntas { background: var(--white); max-width: 900px; margin: 0 auto; }
     .faq-item { border-bottom: 1px solid var(--line); }
@@ -563,6 +600,7 @@
 
     @media (max-width: 1180px) and (min-width: 981px) {
       .services-grid { grid-template-columns: repeat(2, 1fr); }
+      .products-grid { grid-template-columns: repeat(3, 1fr); }
     }
 
     /* ── Responsive ── */
@@ -577,10 +615,15 @@
       .filter-btn { padding: 0.5rem 1.1rem; font-size: 0.72rem; }
       .testi-track { flex-direction: column; }
       .testi-card { flex: 1 1 auto; }
+      .products-grid { grid-template-columns: repeat(2, 1fr); }
       #nosotras { grid-template-columns: 1fr; }
       .nosotras-visual { max-width: 380px; margin: 0 auto; }
       #reserva { grid-template-columns: 1fr; border-radius: 20px; }
       .lightbox-stage { aspect-ratio: 1/1; }
+    }
+
+    @media (max-width: 560px) {
+      .products-grid { grid-template-columns: 1fr; }
     }
 
     @media (prefers-reduced-motion: reduce) {
@@ -600,6 +643,7 @@
     <ul class="nav-links">
       <li><a href="#servicios">Servicios</a></li>
       <li><a href="#resultados">Resultados</a></li>
+      <li><a href="#productos">Productos</a></li>
       <li><a href="#nosotras">Nosotras</a></li>
       <li><a href="#testimonios">Testimonios</a></li>
       <li><a href="#preguntas">Preguntas</a></li>
@@ -613,6 +657,7 @@
   <div class="mobile-menu" id="mobileMenu">
     <a href="#servicios">Servicios</a>
     <a href="#resultados">Resultados</a>
+    <a href="#productos">Productos</a>
     <a href="#nosotras">Nosotras</a>
     <a href="#testimonios">Testimonios</a>
     <a href="#reserva">Reservar cita</a>
@@ -663,7 +708,7 @@
         <span class="service-photos-hint"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><rect x="3" y="5" width="18" height="14" rx="2"/><circle cx="8.5" cy="10" r="1.5"/><path d="M21 16l-5-4-4 3-3-2-6 5"/></svg> Ver fotos</span>
       </div>
 
-      <div class="service-card reveal" data-category="facial" data-service="Rejuvenecimiento facial" data-images="">
+      <div class="service-card reveal" data-category="facial" data-service="Rejuvenecimiento facial" data-images="rejuvenecimiento.png">
         <div class="service-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><circle cx="12" cy="12" r="4"/><path d="M12 2v3M12 19v3M4.2 4.2l2.1 2.1M17.7 17.7l2.1 2.1M2 12h3M19 12h3M4.2 19.8l2.1-2.1M17.7 6.3l2.1-2.1"/></svg></div>
         <span class="service-tag">Facial</span>
         <h3>Rejuvenecimiento facial</h3>
@@ -671,7 +716,7 @@
         <span class="service-photos-hint"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><rect x="3" y="5" width="18" height="14" rx="2"/><circle cx="8.5" cy="10" r="1.5"/><path d="M21 16l-5-4-4 3-3-2-6 5"/></svg> Ver fotos</span>
       </div>
 
-      <div class="service-card reveal" data-category="piel" data-service="Manchas, cicatrices y acné" data-images="">
+      <div class="service-card reveal" data-category="piel" data-service="Manchas, cicatrices y acné" data-images="acne.png">
         <div class="service-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M12 3l2.5 5.5L20 9l-4 4 1 6-5-3-5 3 1-6-4-4 5.5-.5z"/></svg></div>
         <span class="service-tag">Piel y cicatrices</span>
         <h3>Manchas, cicatrices y acné</h3>
@@ -720,7 +765,7 @@
         <span class="service-photos-hint"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><rect x="3" y="5" width="18" height="14" rx="2"/><circle cx="8.5" cy="10" r="1.5"/><path d="M21 16l-5-4-4 3-3-2-6 5"/></svg> Ver fotos</span>
       </div>
 
-      <div class="service-card reveal" data-category="postoperatorio" data-service="Postoperatorios" data-images="">
+      <div class="service-card reveal" data-category="postoperatorio" data-service="Postoperatorios" data-images="postoperatorio.png">
         <div class="service-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M12 20s-7-4.5-7-10a4 4 0 017-2.6A4 4 0 0119 10c0 5.5-7 10-7 10z"/><path d="M12 8v4M10 10h4"/></svg></div>
         <span class="service-tag">Postoperatorio</span>
         <h3>Postoperatorios</h3>
@@ -784,6 +829,92 @@
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 18l6-6-6-6"/></svg>
       </button>
       <div class="media-dots promo-dots" id="promoDots"></div>
+    </div>
+  </section>
+
+  <div class="glow-divider reveal-glow"><span>Para seguir cuidando tu piel en casa</span></div>
+
+  <section id="productos">
+    <div class="section-head reveal">
+      <span class="eyebrow">Tienda</span>
+      <h2 class="section-title">Productos para tu rutina en casa</h2>
+      <p class="section-sub">Selección de productos que complementan tus sesiones en el centro. Escríbenos por WhatsApp para confirmar disponibilidad y coordinar el pago y la entrega.</p>
+    </div>
+
+    <div class="products-grid" id="productsGrid">
+      <div class="product-card reveal" data-product="Protector solar facial FPS 50">
+        <div class="product-media">
+          <span class="product-badge">Más vendido</span>
+          <img src="protector-solar.jpg" alt="Protector solar facial FPS 50" loading="lazy" />
+        </div>
+        <div class="product-body">
+          <span class="product-cat">Cuidado facial</span>
+          <h3>Protector solar facial FPS 50</h3>
+          <p>Indispensable después de cualquier tratamiento láser. Textura ligera, no deja residuo blanco.</p>
+          <div class="product-footer">
+            <div class="product-price">$65.000<span>por unidad</span></div>
+            <a href="#" class="product-buy" data-wa-product="Protector solar facial FPS 50">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 6h15l-1.5 9h-12z"/><circle cx="9" cy="20" r="1"/><circle cx="18" cy="20" r="1"/><path d="M6 6L4 3H2"/></svg>
+              Comprar
+            </a>
+          </div>
+        </div>
+      </div>
+
+      <div class="product-card reveal" data-product="Sérum despigmentante con niacinamida">
+        <div class="product-media">
+          <img src="serum-despigmentante.jpg" alt="Sérum despigmentante con niacinamida" loading="lazy" />
+        </div>
+        <div class="product-body">
+          <span class="product-cat">Manchas y tono</span>
+          <h3>Sérum despigmentante con niacinamida</h3>
+          <p>Ayuda a unificar el tono de la piel y potencia los resultados de tu tratamiento de manchas.</p>
+          <div class="product-footer">
+            <div class="product-price">$89.000<span>por unidad</span></div>
+            <a href="#" class="product-buy" data-wa-product="Sérum despigmentante con niacinamida">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 6h15l-1.5 9h-12z"/><circle cx="9" cy="20" r="1"/><circle cx="18" cy="20" r="1"/><path d="M6 6L4 3H2"/></svg>
+              Comprar
+            </a>
+          </div>
+        </div>
+      </div>
+
+      <div class="product-card reveal" data-product="Crema calmante post-láser">
+        <div class="product-media">
+          <span class="product-badge">Post-sesión</span>
+          <img src="crema-post-laser.jpg" alt="Crema calmante post-láser" loading="lazy" />
+        </div>
+        <div class="product-body">
+          <span class="product-cat">Cuidado post-tratamiento</span>
+          <h3>Crema calmante post-láser</h3>
+          <p>Fórmula con aloe y pantenol para calmar e hidratar la piel tras la depilación o el láser facial.</p>
+          <div class="product-footer">
+            <div class="product-price">$58.000<span>por unidad</span></div>
+            <a href="#" class="product-buy" data-wa-product="Crema calmante post-láser">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 6h15l-1.5 9h-12z"/><circle cx="9" cy="20" r="1"/><circle cx="18" cy="20" r="1"/><path d="M6 6L4 3H2"/></svg>
+              Comprar
+            </a>
+          </div>
+        </div>
+      </div>
+
+      <div class="product-card reveal" data-product="Aceite reafirmante corporal">
+        <div class="product-media">
+          <img src="aceite-corporal.jpg" alt="Aceite reafirmante corporal" loading="lazy" />
+        </div>
+        <div class="product-body">
+          <span class="product-cat">Cuidado corporal</span>
+          <h3>Aceite reafirmante corporal</h3>
+          <p>Complementa tratamientos como criolipólisis o Tensa Max, con activos que ayudan a la firmeza de la piel.</p>
+          <div class="product-footer">
+            <div class="product-price">$72.000<span>por unidad</span></div>
+            <a href="#" class="product-buy" data-wa-product="Aceite reafirmante corporal">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 6h15l-1.5 9h-12z"/><circle cx="9" cy="20" r="1"/><circle cx="18" cy="20" r="1"/><path d="M6 6L4 3H2"/></svg>
+              Comprar
+            </a>
+          </div>
+        </div>
+      </div>
     </div>
   </section>
 
@@ -899,6 +1030,7 @@
           <h4>Explorar</h4>
           <a href="#servicios">Servicios</a>
           <a href="#resultados">Resultados</a>
+          <a href="#productos">Productos</a>
           <a href="#nosotras">Nosotras</a>
           <a href="#testimonios">Testimonios</a>
         </div>
@@ -956,6 +1088,14 @@
     document.getElementById('waFooterLink').href = waLink('Hola, quisiera más información sobre los tratamientos de Yasar Estética.');
     document.getElementById('igBtn').href = INSTAGRAM_URL;
     document.getElementById('igFooterLink').href = INSTAGRAM_URL;
+
+    /* ── Enlaces de WhatsApp para cada producto de la tienda ── */
+    document.querySelectorAll('.product-buy').forEach(btn => {
+      const productName = btn.dataset.waProduct || 'este producto';
+      btn.href = waLink(`Hola, quisiera comprar: ${productName}.`);
+      btn.target = '_blank';
+      btn.rel = 'noopener';
+    });
 
     /* ── Preloader ── */
     window.addEventListener('load', () => {
@@ -1133,7 +1273,9 @@
        Las fotos SOLO se ven aquí, al hacer clic en la tarjeta.
        Las tarjetas en la grilla siempre muestran su ícono normal.
        Para agregar más fotos a futuro, solo edita el
-       atributo data-images de la card correspondiente.
+       atributo data-images de la card correspondiente. Si pones
+       dos o más fotos separadas por coma, aparecen automáticamente
+       las flechas y los puntos para navegar entre ellas.
     ══════════════════════════════════════════════ */
     const overlay      = document.getElementById('lightboxOverlay');
     const stage         = document.getElementById('lightboxStage');
