@@ -469,7 +469,42 @@
       position: relative; aspect-ratio: 1/1; overflow: hidden;
       background: linear-gradient(160deg, var(--blush) 0%, var(--gold-lt) 100%);
     }
-    .product-media img { width: 100%; height: 100%; object-fit: cover; display: block; }
+    .product-media img {
+      position: absolute; inset: 0; z-index: 2;
+      width: 100%; height: 100%; object-fit: cover; display: block;
+    }
+    /* Placeholder animado: se muestra mientras la foto real del producto
+       no exista todavía. En cuanto subas un archivo con el mismo nombre
+       que el src de la <img>, la foto carga sola y tapa este placeholder;
+       no hay que tocar el HTML. */
+    .product-placeholder {
+      position: absolute; inset: 0; z-index: 1;
+      display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 0.7rem;
+      background: linear-gradient(160deg, var(--blush) 0%, var(--gold-lt) 100%);
+      overflow: hidden;
+    }
+    .product-placeholder svg {
+      width: 34px; height: 34px; color: var(--bark); opacity: 0.55; position: relative; z-index: 2;
+      animation: placeholder-breathe 3.2s ease-in-out infinite;
+    }
+    .product-placeholder span {
+      font-family: 'Fraunces', serif; font-style: italic; font-size: 0.78rem;
+      color: var(--bark); opacity: 0.55; position: relative; z-index: 2;
+    }
+    .product-placeholder::before {
+      content: ''; position: absolute; top: 0; bottom: 0; left: -60%; width: 45%;
+      background: linear-gradient(100deg, transparent, rgba(255,253,251,0.55), transparent);
+      animation: placeholder-sweep 2.6s ease-in-out infinite;
+      z-index: 1;
+    }
+    @keyframes placeholder-sweep {
+      0% { left: -60%; }
+      55%, 100% { left: 130%; }
+    }
+    @keyframes placeholder-breathe {
+      0%, 100% { transform: scale(1); opacity: 0.5; }
+      50% { transform: scale(1.08); opacity: 0.7; }
+    }
     .product-badge {
       position: absolute; top: 0.8rem; left: 0.8rem; z-index: 2;
       font-size: 0.62rem; letter-spacing: 0.09em; text-transform: uppercase;
@@ -845,7 +880,11 @@
       <div class="product-card reveal" data-product="Protector solar facial FPS 50">
         <div class="product-media">
           <span class="product-badge">Más vendido</span>
-          <img src="protector-solar.jpg" alt="Protector solar facial FPS 50" loading="lazy" />
+          <div class="product-placeholder">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="12" cy="12" r="4"/><path d="M12 2v3M12 19v3M4.2 4.2l2.1 2.1M17.7 17.7l2.1 2.1M2 12h3M19 12h3M4.2 19.8l2.1-2.1M17.7 6.3l2.1-2.1"/></svg>
+            <span>Foto próximamente</span>
+          </div>
+          <img src="protector-solar.jpg" alt="Protector solar facial FPS 50" loading="lazy" onerror="this.remove()" />
         </div>
         <div class="product-body">
           <span class="product-cat">Cuidado facial</span>
@@ -863,7 +902,11 @@
 
       <div class="product-card reveal" data-product="Sérum despigmentante con niacinamida">
         <div class="product-media">
-          <img src="serum-despigmentante.jpg" alt="Sérum despigmentante con niacinamida" loading="lazy" />
+          <div class="product-placeholder">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M12 3c3 4 5 7 5 10a5 5 0 01-10 0c0-3 2-6 5-10z"/></svg>
+            <span>Foto próximamente</span>
+          </div>
+          <img src="serum-despigmentante.jpg" alt="Sérum despigmentante con niacinamida" loading="lazy" onerror="this.remove()" />
         </div>
         <div class="product-body">
           <span class="product-cat">Manchas y tono</span>
@@ -882,7 +925,11 @@
       <div class="product-card reveal" data-product="Crema calmante post-láser">
         <div class="product-media">
           <span class="product-badge">Post-sesión</span>
-          <img src="crema-post-laser.jpg" alt="Crema calmante post-láser" loading="lazy" />
+          <div class="product-placeholder">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="5" y="9" width="14" height="12" rx="2"/><path d="M8 9V6a4 4 0 018 0v3"/></svg>
+            <span>Foto próximamente</span>
+          </div>
+          <img src="crema-post-laser.jpg" alt="Crema calmante post-láser" loading="lazy" onerror="this.remove()" />
         </div>
         <div class="product-body">
           <span class="product-cat">Cuidado post-tratamiento</span>
@@ -900,7 +947,11 @@
 
       <div class="product-card reveal" data-product="Aceite reafirmante corporal">
         <div class="product-media">
-          <img src="aceite-corporal.jpg" alt="Aceite reafirmante corporal" loading="lazy" />
+          <div class="product-placeholder">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M9 3h6l1 4H8l1-4z"/><path d="M8 7l-2 3v9a2 2 0 002 2h8a2 2 0 002-2v-9l-2-3"/><path d="M9 14c1 1 5 1 6 0" opacity="0.6"/></svg>
+            <span>Foto próximamente</span>
+          </div>
+          <img src="aceite-corporal.jpg" alt="Aceite reafirmante corporal" loading="lazy" onerror="this.remove()" />
         </div>
         <div class="product-body">
           <span class="product-cat">Cuidado corporal</span>
